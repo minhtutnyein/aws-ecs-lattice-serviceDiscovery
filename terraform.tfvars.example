@@ -1,0 +1,51 @@
+aws_region   = "ap-southeast-1"
+project_name = "ecs-lattice"
+environment  = "dev"
+
+availability_zones   = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+public_subnet_cidrs  = ["10.30.1.0/24", "10.30.2.0/24", "10.30.3.0/24"]
+private_subnet_cidrs = ["10.30.11.0/24", "10.30.12.0/24", "10.30.13.0/24"]
+
+enable_nat_gateway = true
+nat_gateway_per_az = false
+
+vpc_lattice_auth_type          = "AWS_IAM"
+enable_lattice_auth_policy     = true
+allowed_lattice_invoke_principal_arns = []
+create_private_ca              = true
+enable_workload_mtls_bundle    = false
+dashboard_to_counting_mode     = "lattice_https"
+enable_eventbridge_lambda_reconciler = false
+enable_lattice_access_logs     = false
+enable_public_dashboard        = true
+public_dashboard_listener_port = 80
+public_dashboard_https_port    = 443
+redirect_http_to_https         = true
+
+# Set this to a valid ACM certificate ARN in ap-southeast-1 for your public domain.
+# Example: arn:aws:acm:ap-southeast-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+dashboard_alb_certificate_arn = ""
+
+services = {
+  counting = {
+    image          = "<aws_account_id>.dkr.ecr.ap-southeast-1.amazonaws.com/counting:<tag>"
+    container_port = 9003
+    desired_count  = 2
+    cpu            = 256
+    memory         = 512
+    health_path    = "/"
+  }
+
+  dashboard = {
+    image          = "<aws_account_id>.dkr.ecr.ap-southeast-1.amazonaws.com/dashboard:<tag>"
+    container_port = 9002
+    desired_count  = 2
+    cpu            = 256
+    memory         = 512
+    health_path    = "/"
+    environment_vars = {
+      # Optional override. If omitted, Terraform sets this automatically from dashboard_to_counting_mode.
+      # COUNTING_SERVICE_URL = "https://<lattice-counting-dns>"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+# Terraform working directory
+.terraform/
+*.terraform.*
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Terraform plan files
+*.tfplan
+*.plan
+
+# Variable override and local variable files
+*.auto.tfvars
+*.auto.tfvars.json
+terraform.tfvars
+terraform.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Crash and debug logs
+crash.log
+crash.*.log
+
+# CLI config files
+.terraformrc
+terraform.rc
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# *.md files
+*.md
+!README.md
+
+# --- IGNORE ---
+iam list-policies --scope AWS --max-items 1000 --query Policies[?contains(PolicyName, 'InfrastructureRole')].[PolicyName,Arn] --output text
