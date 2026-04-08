@@ -37,7 +37,6 @@ Thumbs.db
 # *.md files
 *.md
 !README.md
-!ecs_vpc_lattice_doc.md
 
 # --- IGNORE ---
 iam list-policies --scope AWS --max-items 1000 --query Policies[?contains(PolicyName, 'InfrastructureRole')].[PolicyName,Arn] --output text
